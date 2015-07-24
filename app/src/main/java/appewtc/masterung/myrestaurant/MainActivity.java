@@ -1,5 +1,7 @@
 package appewtc.masterung.myrestaurant;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +9,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -26,11 +30,16 @@ public class MainActivity extends AppCompatActivity {
     private UserTABLE objUserTABLE;
     private FoodTABLE objFoodTABLE;
     private OrderTABLE objOrderTABLE;
+    private EditText userEditText, passwordEditText;
+    private String userString, passwordString, nameString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Bind Widget
+        bindWidget();
 
         //Request Database
         requestDatabase();
@@ -45,6 +54,63 @@ public class MainActivity extends AppCompatActivity {
         synJSONtoSQLite();
 
     }   // onCreate
+
+    public void clickLogin(View view) {
+
+        userString = userEditText.getText().toString().trim();
+        passwordString = passwordEditText.getText().toString().trim();
+
+        //Check Zero
+        if (userString.equals("") || passwordString.equals("")) {
+
+            //Have Space
+            errorDialog("มีช่องว่าง", "กรุณากรอกทุกช่อง นะคะ");
+
+        } else {
+
+            //Check User
+            checkUser();
+
+        }
+
+    }   // clickLogin
+
+    private void checkUser() {
+
+        try {
+
+            String strMyResult[] = objUserTABLE.searchUser(userString);
+            nameString = strMyResult[3];
+            Log.d("Rest", "Name ==> " + nameString);
+
+        } catch (Exception e) {
+            errorDialog("ไม่มี User", "ไม่มี " + userString + " ใน ฐานข้อมูลของเราเลย");
+        }
+
+    }
+
+    private void errorDialog(String strTitle, String strMessage) {
+
+        AlertDialog.Builder objBuilder = new AlertDialog.Builder(this);
+        objBuilder.setIcon(R.drawable.icon_question);
+        objBuilder.setTitle(strTitle);
+        objBuilder.setMessage(strMessage);
+        objBuilder.setCancelable(false);
+        objBuilder.setPositiveButton("ตกลง", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        objBuilder.show();
+
+    }   // errorDialog
+
+
+    private void bindWidget() {
+        userEditText = (EditText) findViewById(R.id.editText);
+        passwordEditText = (EditText) findViewById(R.id.editText2);
+    }
 
     private void synJSONtoSQLite() {
 

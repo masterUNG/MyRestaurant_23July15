@@ -2,6 +2,7 @@ package appewtc.masterung.myrestaurant;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
@@ -83,9 +84,55 @@ public class MainActivity extends AppCompatActivity {
             nameString = strMyResult[3];
             Log.d("Rest", "Name ==> " + nameString);
 
+            //Check Password
+            checkPassword(strMyResult[2]);
+
         } catch (Exception e) {
             errorDialog("ไม่มี User", "ไม่มี " + userString + " ใน ฐานข้อมูลของเราเลย");
         }
+
+    }
+
+    private void checkPassword(String strTruePass) {
+
+        if (passwordString.equals(strTruePass)) {
+
+            //Welcome My Officer
+            welcomeOfficer();
+
+        } else {
+            errorDialog("Password False", "Please Try Agains Password False");
+        }
+
+    }
+
+    private void welcomeOfficer() {
+
+        AlertDialog.Builder objBuilder = new AlertDialog.Builder(this);
+        objBuilder.setIcon(R.drawable.restaurant);
+        objBuilder.setTitle("Welcome Officer");
+        objBuilder.setMessage("ยินดีต้อนรับ " + nameString + "\n" + "สู่ร้านของเรา");
+        objBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                userEditText.setText("");
+                passwordEditText.setText("");
+                dialogInterface.dismiss();
+            }
+        });
+        objBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                //Intent to Order
+                Intent objIntent = new Intent(MainActivity.this, OrderActivity.class);
+                objIntent.putExtra("Officer", nameString);
+                startActivity(objIntent);
+                finish();
+                dialogInterface.dismiss();
+            }
+        });
+        objBuilder.show();
 
     }
 

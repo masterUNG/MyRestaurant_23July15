@@ -2,9 +2,10 @@ package appewtc.masterung.myrestaurant;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,6 +53,13 @@ public class OrderActivity extends AppCompatActivity {
         createListView();
 
     }   // onCreate
+
+    public void clickConfirm(View view) {
+        Intent objIntent = new Intent(OrderActivity.this, ComfirmOrderActivity.class);
+        objIntent.putExtra("Officer", officerString);
+        objIntent.putExtra("Desk", deskString);
+        startActivity(objIntent);
+    }
 
     private void createListView() {
 

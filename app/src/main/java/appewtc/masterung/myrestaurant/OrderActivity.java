@@ -1,7 +1,11 @@
 package appewtc.masterung.myrestaurant;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,6 +14,16 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.util.ArrayList;
 
 public class OrderActivity extends AppCompatActivity {
 
@@ -42,7 +56,7 @@ public class OrderActivity extends AppCompatActivity {
     private void createListView() {
 
         FoodTABLE objFoodTABLE = new FoodTABLE(this);
-        String[] strFood = objFoodTABLE.readAllFood();
+        final String[] strFood = objFoodTABLE.readAllFood();
         String[] strPrice = objFoodTABLE.readAllPrice();
         int[] intDrawable = {R.drawable.food1, R.drawable.food2, R.drawable.food3,
                 R.drawable.food4, R.drawable.food5, R.drawable.food6, R.drawable.food7,
@@ -60,7 +74,87 @@ public class OrderActivity extends AppCompatActivity {
         MyAdapter objMyAdapter = new MyAdapter(OrderActivity.this, strFood, strPrice, intDrawable);
         foodListView.setAdapter(objMyAdapter);
 
+        //Active when Click on ListView
+        foodListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                foodString = strFood[i];
+
+                //Choose Item
+                chooseItem();
+
+            }
+        });
+
     }   // createListView
+
+    private void chooseItem() {
+
+        final CharSequence[] objSequence = {"1 set", "2 set", "3 set", "4 set", "5 set"};
+        AlertDialog.Builder objBuilder = new AlertDialog.Builder(this);
+        objBuilder.setTitle(foodString);
+        objBuilder.setSingleChoiceItems(objSequence, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                switch (i) {
+                    case 0:
+                        itemString = "1";
+                        break;
+                    case 1:
+                        itemString = "2";
+                        break;
+                    case 2:
+                        itemString = "3";
+                        break;
+                    case 3:
+                        itemString = "4";
+                        break;
+                    case 4:
+                        itemString = "5";
+                        break;
+                }   // switch
+
+                //Upload to mySQL
+                uploadToMySQL();
+                dialogInterface.dismiss();
+
+            }   //event
+        });
+        objBuilder.show();
+
+    }   //chooseItem
+
+    private void uploadToMySQL() {
+
+        //Set Policy
+        StrictMode.ThreadPolicy myPolicy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(myPolicy);
+
+        try {
+
+            ArrayList<NameValuePair> objNameValuePairs = new ArrayList<NameValuePair>();
+            objNameValuePairs.add(new BasicNameValuePair("isAdd", "true"));
+            objNameValuePairs.add(new BasicNameValuePair("Officer", officerString));
+            objNameValuePairs.add(new BasicNameValuePair("Desk", deskString));
+            objNameValuePairs.add(new BasicNameValuePair("Food", foodString));
+            objNameValuePairs.add(new BasicNameValuePair("Item", itemString));
+
+            HttpClient objHttpClient = new DefaultHttpClient();
+            HttpPost objHttpPost = new HttpPost("http://swiftcodingthai.com/23jul/add_data_restaurant.php");
+            objHttpPost.setEntity(new UrlEncodedFormEntity(objNameValuePairs, "UTF-8"));
+            objHttpClient.execute(objHttpPost);
+
+            Toast.makeText(OrderActivity.this, "Upload Finish", Toast.LENGTH_SHORT).show();
+
+
+
+        } catch (Exception e) {
+            Log.d("Rest", "up MySQL ==> " + e.toString());
+        }
+
+    }   // uploadToMySQL
 
     private void createSpinner() {
 

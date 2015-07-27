@@ -116,8 +116,8 @@ public class OrderActivity extends AppCompatActivity {
                         break;
                 }   // switch
 
-                //Upload to mySQL
-                uploadToMySQL();
+                //Upload to SQLite
+                uploadToSQLite();
                 dialogInterface.dismiss();
 
             }   //event
@@ -126,6 +126,15 @@ public class OrderActivity extends AppCompatActivity {
 
     }   //chooseItem
 
+    private void uploadToSQLite() {
+
+        OrderTABLE objOrderTABLE = new OrderTABLE(this);
+        objOrderTABLE.addNewOrder(officerString, deskString, foodString, itemString);
+        Log.d("Rest", "Add ==> " + foodString + " to my SQLite");
+
+    } //uploadToSQLite
+
+    //เมธอด ที่ทำหน้าที่ post Data ไปที่ mySQL ที่ละ Record
     private void uploadToMySQL() {
 
         //Set Policy

@@ -28,7 +28,20 @@ public class ComfirmOrderActivity extends AppCompatActivity {
         //Show Desk
         showDesk();
 
+        //Create Listview
+        createListview();
+
     }   // onCreate
+
+    private void createListview() {
+
+        OrderTABLE objOrderTABLE = new OrderTABLE(this);
+        String[] foodStrings = objOrderTABLE.readAllFoodOrder();
+        String[] itemStrings = objOrderTABLE.readAllItem();
+        ComfirmAdapter objComfirmAdapter = new ComfirmAdapter(ComfirmOrderActivity.this, foodStrings, itemStrings);
+        showFoodListView.setAdapter(objComfirmAdapter);
+
+    }   // createListview
 
     public void clickOrderFood(View view) {
 
@@ -41,6 +54,7 @@ public class ComfirmOrderActivity extends AppCompatActivity {
     private void bindWidget() {
         showOfficer = (TextView) findViewById(R.id.txtShowOfficerOrder);
         showDesk = (TextView) findViewById(R.id.txtShowDesk);
+        showFoodListView = (ListView) findViewById(R.id.listView2);
     }
 
 

@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/linButton"
         android:padding="10dp"
-        android:background="#82ffffff">
+        android:background="#a0ffffff">
 
         <TextView
             android:layout_width="wrap_content"
@@ -47,7 +47,7 @@
         </LinearLayout>
 
         <ListView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/listView2" />
     </LinearLayout>

@@ -19,5 +19,6 @@
         android:id="@+id/txtItemOrder"
         android:textSize="25dp"
         android:textStyle="bold"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:gravity="center" />
 </LinearLayout>

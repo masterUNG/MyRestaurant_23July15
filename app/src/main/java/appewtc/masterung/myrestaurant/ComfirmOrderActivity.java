@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -28,6 +29,14 @@ public class ComfirmOrderActivity extends AppCompatActivity {
         showDesk();
 
     }   // onCreate
+
+    public void clickOrderFood(View view) {
+
+    }
+
+    public void clickAddMore(View view) {
+        finish();
+    }
 
     private void bindWidget() {
         showOfficer = (TextView) findViewById(R.id.txtShowOfficerOrder);

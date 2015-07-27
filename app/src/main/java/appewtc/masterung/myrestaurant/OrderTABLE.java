@@ -2,6 +2,7 @@ package appewtc.masterung.myrestaurant;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 /**
@@ -27,6 +28,44 @@ public class OrderTABLE {
         readDatabase = objMyOpenHelper.getReadableDatabase();
 
     }   // Constructor
+
+    public String[] readAllItem() {
+
+        String[] strItem = null;
+        Cursor objCursor = readDatabase.query(ORDER_TABLE,
+                new String[]{COLUMN_ID_ORDER, COLUMN_ITME},
+                null, null, null, null, null);
+
+        if (objCursor != null) {
+            strItem = new String[objCursor.getCount()];
+            objCursor.moveToFirst();
+            for (int i = 0; i < objCursor.getCount(); i++) {
+                strItem[i] = objCursor.getString(objCursor.getColumnIndex(COLUMN_ITME));
+                objCursor.moveToNext();
+            }
+        }
+
+        return strItem;
+    }
+
+    public String[] readAllFoodOrder() {
+
+        String[] strFood = null;
+        Cursor objCursor = readDatabase.query(ORDER_TABLE,
+                new String[]{COLUMN_ID_ORDER, COLUMN_FOOD},
+                null, null, null, null, null);
+
+        if (objCursor != null) {
+            strFood = new String[objCursor.getCount()];
+            objCursor.moveToFirst();
+            for (int i = 0; i < objCursor.getCount(); i++) {
+                strFood[i] = objCursor.getString(objCursor.getColumnIndex(COLUMN_FOOD));
+                objCursor.moveToNext();
+            }
+        }   // if
+
+        return strFood;
+    }
 
     public long addNewOrder(String strOfficer, String strDesk, String strFood, String strItem) {
 

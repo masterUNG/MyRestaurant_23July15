@@ -63,6 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Add more..."
+            android:onClick="clickAddMore"
             android:id="@+id/button3"
             android:layout_weight="1" />
 
@@ -70,6 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Order Food"
+            android:onClick="clickOrderFood"
             android:id="@+id/button4"
             android:layout_weight="1" />
     </LinearLayout>

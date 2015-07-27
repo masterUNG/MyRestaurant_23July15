@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -15,16 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.util.ArrayList;
 
 public class OrderActivity extends AppCompatActivity {
 
@@ -141,37 +130,6 @@ public class OrderActivity extends AppCompatActivity {
         Log.d("Rest", "Add ==> " + foodString + " to my SQLite");
 
     } //uploadToSQLite
-
-    //เมธอด ที่ทำหน้าที่ post Data ไปที่ mySQL ที่ละ Record
-    private void uploadToMySQL() {
-
-        //Set Policy
-        StrictMode.ThreadPolicy myPolicy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(myPolicy);
-
-        try {
-
-            ArrayList<NameValuePair> objNameValuePairs = new ArrayList<NameValuePair>();
-            objNameValuePairs.add(new BasicNameValuePair("isAdd", "true"));
-            objNameValuePairs.add(new BasicNameValuePair("Officer", officerString));
-            objNameValuePairs.add(new BasicNameValuePair("Desk", deskString));
-            objNameValuePairs.add(new BasicNameValuePair("Food", foodString));
-            objNameValuePairs.add(new BasicNameValuePair("Item", itemString));
-
-            HttpClient objHttpClient = new DefaultHttpClient();
-            HttpPost objHttpPost = new HttpPost("http://swiftcodingthai.com/23jul/add_data_restaurant.php");
-            objHttpPost.setEntity(new UrlEncodedFormEntity(objNameValuePairs, "UTF-8"));
-            objHttpClient.execute(objHttpPost);
-
-            Toast.makeText(OrderActivity.this, "Upload Finish", Toast.LENGTH_SHORT).show();
-
-
-
-        } catch (Exception e) {
-            Log.d("Rest", "up MySQL ==> " + e.toString());
-        }
-
-    }   // uploadToMySQL
 
     private void createSpinner() {
 

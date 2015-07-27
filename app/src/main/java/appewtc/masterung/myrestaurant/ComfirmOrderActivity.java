@@ -1,18 +1,31 @@
 package appewtc.masterung.myrestaurant;
 
-import android.support.v7.app.AppCompatActivity;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.util.ArrayList;
 
 public class ComfirmOrderActivity extends AppCompatActivity {
 
     //Explicit
     private TextView showOfficer, showDesk;
     private ListView showFoodListView;
+    private String officerString, deskString, foodString[], itemString[];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,15 +49,54 @@ public class ComfirmOrderActivity extends AppCompatActivity {
     private void createListview() {
 
         OrderTABLE objOrderTABLE = new OrderTABLE(this);
-        String[] foodStrings = objOrderTABLE.readAllFoodOrder();
-        String[] itemStrings = objOrderTABLE.readAllItem();
-        ComfirmAdapter objComfirmAdapter = new ComfirmAdapter(ComfirmOrderActivity.this, foodStrings, itemStrings);
+        foodString = objOrderTABLE.readAllFoodOrder();
+        itemString = objOrderTABLE.readAllItem();
+        ComfirmAdapter objComfirmAdapter = new ComfirmAdapter(ComfirmOrderActivity.this, foodString, itemString);
         showFoodListView.setAdapter(objComfirmAdapter);
 
     }   // createListview
 
     public void clickOrderFood(View view) {
 
+        //Setup Policy
+        StrictMode.ThreadPolicy objPolicy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(objPolicy);
+
+        for (int i = 0; i < foodString.length; i++) {
+
+            try {
+
+                ArrayList<NameValuePair> objNameValuePairs = new ArrayList<NameValuePair>();
+                objNameValuePairs.add(new BasicNameValuePair("isAdd", "true"));
+                objNameValuePairs.add(new BasicNameValuePair("Officer", officerString));
+                objNameValuePairs.add(new BasicNameValuePair("Desk", deskString));
+                objNameValuePairs.add(new BasicNameValuePair("Food", foodString[i]));
+                objNameValuePairs.add(new BasicNameValuePair("Item", itemString[i]));
+
+                HttpClient objHttpClient = new DefaultHttpClient();
+                HttpPost objHttpPost = new HttpPost("http://swiftcodingthai.com/23jul/add_data_restaurant.php");
+                objHttpPost.setEntity(new UrlEncodedFormEntity(objNameValuePairs, "UTF-8"));
+                objHttpClient.execute(objHttpPost);
+
+            } catch (Exception e) {
+                Toast.makeText(ComfirmOrderActivity.this, "Error Cannot Upload Order", Toast.LENGTH_SHORT).show();
+            }
+
+        }   // for
+
+        Toast.makeText(ComfirmOrderActivity.this, "Upload Finish", Toast.LENGTH_SHORT).show();
+
+        //Delete All Order Table
+        deleteAllOrder();
+
+        finish();
+
+
+    }   // clickOrderFood
+
+    private void deleteAllOrder() {
+        SQLiteDatabase objDatabase = openOrCreateDatabase("Restaurant.db", MODE_PRIVATE, null);
+        objDatabase.delete("orderTABLE", null, null);
     }
 
     public void clickAddMore(View view) {
@@ -59,13 +111,13 @@ public class ComfirmOrderActivity extends AppCompatActivity {
 
 
     private void showDesk() {
-        String strDesk = getIntent().getExtras().getString("Desk");
-        showDesk.setText(strDesk);
+        deskString = getIntent().getExtras().getString("Desk");
+        showDesk.setText(deskString);
     }
 
     private void showOfficer() {
-        String strOfficer = getIntent().getExtras().getString("Officer");
-        showOfficer.setText(strOfficer);
+        officerString = getIntent().getExtras().getString("Officer");
+        showOfficer.setText(officerString);
     }
 
     @Override

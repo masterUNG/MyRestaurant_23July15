@@ -55,6 +55,7 @@ public class OrderActivity extends AppCompatActivity {
         FoodTABLE objFoodTABLE = new FoodTABLE(this);
         final String[] strFood = objFoodTABLE.readAllFood();
         String[] strPrice = objFoodTABLE.readAllPrice();
+        String[] strSource = objFoodTABLE.readAllSource();
         int[] intDrawable = {R.drawable.food1, R.drawable.food2, R.drawable.food3,
                 R.drawable.food4, R.drawable.food5, R.drawable.food6, R.drawable.food7,
                 R.drawable.food8, R.drawable.food9, R.drawable.food10, R.drawable.food11,
@@ -68,7 +69,7 @@ public class OrderActivity extends AppCompatActivity {
                 R.drawable.food40, R.drawable.food41, R.drawable.food42, R.drawable.food43,
                 R.drawable.food44, R.drawable.food45, R.drawable.food46, R.drawable.food47,
                 R.drawable.food48, R.drawable.food49, R.drawable.food50};
-        MyAdapter objMyAdapter = new MyAdapter(OrderActivity.this, strFood, strPrice, intDrawable);
+        MyAdapter objMyAdapter = new MyAdapter(OrderActivity.this, strFood, strPrice, strSource, intDrawable);
         foodListView.setAdapter(objMyAdapter);
 
         //Active when Click on ListView

@@ -8,6 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 /**
  * Created by masterUNG on 7/24/15 AD.
  */
@@ -15,13 +17,14 @@ public class MyAdapter extends BaseAdapter{
 
     //Explicit
     private Context objContext;
-    private String[] foodStrings, priceStrings;
+    private String[] foodStrings, priceStrings, sourceStrings;
     private int[] imageInts;
 
-    public MyAdapter(Context objContext, String[] foodStrings, String[] priceStrings, int[] imageInts) {
+    public MyAdapter(Context objContext, String[] foodStrings, String[] priceStrings,  String[] sourceStrings, int[] imageInts) {
         this.objContext = objContext;
         this.foodStrings = foodStrings;
         this.priceStrings = priceStrings;
+        this.sourceStrings = sourceStrings;
         this.imageInts = imageInts;
     }
 
@@ -56,7 +59,9 @@ public class MyAdapter extends BaseAdapter{
 
         //Show Image
         ImageView foodImageView = (ImageView) view1.findViewById(R.id.imvFood);
-        foodImageView.setBackgroundResource(imageInts[i]);
+        //foodImageView.setBackgroundResource(imageInts[i]);
+        Picasso.with(objContext).load(sourceStrings[i]).resize(250, 250).into(foodImageView);
+
 
         return view1;
     }

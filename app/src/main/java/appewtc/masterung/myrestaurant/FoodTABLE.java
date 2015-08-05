@@ -28,6 +28,26 @@ public class FoodTABLE {
 
     }   // Constructor
 
+    //Read All Source
+    public String[] readAllSource() {
+
+        String[] strSource = null;
+        Cursor objCursor = readDatabase.query(FOOD_TABLE,
+                new String[] {COLUMN_ID_FOOD, COLUMN_SOURCE},
+                null, null, null, null, null);
+        if (objCursor != null) {
+            objCursor.moveToFirst();
+            strSource = new String[objCursor.getCount()];
+            for (int i = 0; i < objCursor.getCount(); i++) {
+                strSource[i] = objCursor.getString(objCursor.getColumnIndex(COLUMN_SOURCE));
+                objCursor.moveToNext();
+            }
+        }
+
+        objCursor.close();
+        return strSource;
+    }
+
     //Read All Price
     public String[] readAllPrice() {
 

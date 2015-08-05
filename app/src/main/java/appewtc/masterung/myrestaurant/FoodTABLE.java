@@ -16,6 +16,7 @@ public class FoodTABLE {
     public static final String FOOD_TABLE = "foodTABLE";
     public static final String COLUMN_ID_FOOD = "_id";
     public static final String COLUMN_FOOD = "Food";
+    public static final String COLUMN_SOURCE = "Source";
     public static final String COLUMN_PRICE = "Price";
 
     public FoodTABLE(Context context) {
@@ -70,10 +71,11 @@ public class FoodTABLE {
         return strFood;
     }
 
-    public long addValueFood(String strFood, String strPrice) {
+    public long addValueFood(String strFood, String strSource, String strPrice) {
 
         ContentValues objContentValues = new ContentValues();
         objContentValues.put(COLUMN_FOOD, strFood);
+        objContentValues.put(COLUMN_SOURCE, strSource);
         objContentValues.put(COLUMN_PRICE, strPrice);
 
         return writeDatabase.insert(FOOD_TABLE, null, objContentValues);

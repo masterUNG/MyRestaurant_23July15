@@ -238,8 +238,9 @@ public class MainActivity extends AppCompatActivity {
 
                         //Update foodTABLE
                         String strFood = objJSONObject.getString("Food");
+                        String strSource = objJSONObject.getString("Source");
                         String strPrice = objJSONObject.getString("Price");
-                        objFoodTABLE.addValueFood(strFood, strPrice);
+                        objFoodTABLE.addValueFood(strFood, strSource, strPrice);
 
                     }
 
@@ -275,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
     private void testAddValue() {
 
         objUserTABLE.addNewUser("testUser", "testPass", "ทดสอบ นะคะ");
-        objFoodTABLE.addValueFood("ข้าวไข่เจียว", "30");
+        objFoodTABLE.addValueFood("ข้าวไข่เจียว", "Sourse", "30");
         objOrderTABLE.addNewOrder("testOfficer", "testDesk", "testFood", "4");
 
     }
